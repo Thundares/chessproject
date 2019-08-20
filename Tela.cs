@@ -1,5 +1,6 @@
 using board;
 using System;
+using Game;
 
 namespace console
 {
@@ -25,6 +26,13 @@ namespace console
             Console.WriteLine("  a b c d e f g h");
         }
 
+        public static ChessPosition readCommand()
+        {
+            string s = Console.ReadLine();
+            char line = s[0];
+            int col = int.Parse(s[1] + "");
+            return new ChessPosition(line, col);
+        }
         public static void printPeca(Peca p)
         {
             if(p.color == Color.white)

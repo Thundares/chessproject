@@ -9,11 +9,14 @@ namespace Game
         private int turn;
         private Color playerTurn;
 
+        public bool Finished { get; private set; }
+
         public ChessGame()
         {
             board = new Board(8,8);
             turn = 1;
             playerTurn = Color.white;
+            Finished = false;
             Initialize();
         }
 
@@ -30,7 +33,7 @@ namespace Game
 
             board.putPeca(new King(board, Color.white), new ChessPosition('e',1).ToPosition());
             board.putPeca(new King(board, Color.black), new ChessPosition('e',8).ToPosition());
-            
+
             board.putPeca(new Tower(board, Color.white), new ChessPosition('a',1).ToPosition());
             board.putPeca(new Tower(board, Color.white), new ChessPosition('h',1).ToPosition());
             board.putPeca(new Tower(board, Color.black), new ChessPosition('a',8).ToPosition());

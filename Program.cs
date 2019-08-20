@@ -11,8 +11,19 @@ namespace console
             try
             {
                 ChessGame game = new ChessGame();
+                while(!game.Finished)
+                {
+                    Console.Clear();
+                    Screen.printBoard(game.board);
+                    
+                    Console.Write("Put the origin: ");
+                    Position origin = Screen.readCommand().ToPosition();
+                    
+                    Console.Write("Put the destiny: ");
+                    Position destiny = Screen.readCommand().ToPosition();
 
-                Screen.printBoard(game.board);
+                    game.move(origin, destiny);
+                }
             }
             catch(BoardExceptions e)
             {
