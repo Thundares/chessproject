@@ -1,4 +1,4 @@
-
+using Game;
 
 namespace board
 {
@@ -9,9 +9,9 @@ namespace board
         public int manyMoves { get;  protected set; }
         public Board board { get; protected set; }
 
-        public Peca(Position posicao, Board board, Color color)
+        public Peca(Board board, Color color)
         {
-            this.posicao = posicao;
+            this.posicao = null;
             this.board = board;
             this.color = color;
             this.manyMoves = 0;

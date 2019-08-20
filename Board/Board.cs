@@ -19,5 +19,10 @@ namespace board
         {
             return pecas[line, col];
         }
+
+        public void putPeca(Peca peca, Position position)
+        {
+            pecas[position.line, position.col] = peca;
+        }
     }
 }
