@@ -20,9 +20,37 @@ namespace board
             return pecas[line, col];
         }
 
+        public Peca peca(Position pos)
+        {
+            return pecas[pos.line, pos.col];
+        }
+
+        public bool isThereaPeca(Position pos)
+        {
+            positionValidates(pos);
+            return peca(pos) != null;
+        }
         public void putPeca(Peca peca, Position position)
         {
+            if(isThereaPeca(position))
+            {
+                throw new BoardExceptions("There is already a peca in this place");
+            }
             pecas[position.line, position.col] = peca;
+            peca.posicao = position;
+        }
+
+        public bool validPosition(Position pos)
+        {
+            if(pos.col < 0 || pos.line < 0 || pos.line > line || pos.col > col)
+                return false;   
+            return true;
+        }
+
+        public void positionValidates(Position pos)
+        {
+            if(!validPosition(pos))
+                throw new BoardExceptions("Invalid position!");
         }
     }
 }
