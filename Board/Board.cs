@@ -40,6 +40,18 @@ namespace board
             peca.posicao = position;
         }
 
+        public Peca removePeca(Position pos)
+        {
+            if(peca(pos) == null)
+            {
+                return null;
+            }
+            Peca aux = peca(pos);
+            aux.posicao = null;
+            pecas[pos.line, pos.col] = null;
+            return aux;
+        }
+
         public bool validPosition(Position pos)
         {
             if(pos.col < 0 || pos.line < 0 || pos.line > line || pos.col > col)

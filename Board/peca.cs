@@ -16,6 +16,11 @@ namespace board
             this.color = color;
             this.manyMoves = 0;
         }
+
+        public void moreMoves()
+        {
+            manyMoves++;
+        }
         
     }
 }
