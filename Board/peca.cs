@@ -1,6 +1,6 @@
 
 
-namespace Board
+namespace board
 {
     class Peca
     {
@@ -16,5 +16,6 @@ namespace Board
             this.color = color;
             this.manyMoves = 0;
         }
+        
     }
 }
