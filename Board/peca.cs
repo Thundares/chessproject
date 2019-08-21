@@ -2,7 +2,7 @@ using Game;
 
 namespace board
 {
-    class Peca
+    abstract class Peca
     {
         public Position posicao { get; set; }
         public Color color { get; set; }
@@ -17,6 +17,7 @@ namespace board
             this.manyMoves = 0;
         }
 
+        public abstract bool[,] possibleMoves();
         public void moreMoves()
         {
             manyMoves++;

@@ -39,6 +39,18 @@ namespace Game
             board.putPeca(new Tower(board, Color.black), new ChessPosition('a',8).ToPosition());
             board.putPeca(new Tower(board, Color.black), new ChessPosition('h',8).ToPosition());
 
+            board.putPeca(new Horse(board, Color.black), new ChessPosition('b', 8).ToPosition());
+            board.putPeca(new Horse(board, Color.black), new ChessPosition('g', 8).ToPosition());
+            board.putPeca(new Horse(board, Color.white), new ChessPosition('b', 1).ToPosition());
+            board.putPeca(new Horse(board, Color.white), new ChessPosition('g', 1).ToPosition());
+
+            board.putPeca(new Bishop(board, Color.black), new ChessPosition('c', 8).ToPosition());
+            board.putPeca(new Bishop(board, Color.black), new ChessPosition('f', 8).ToPosition());
+            board.putPeca(new Bishop(board, Color.white), new ChessPosition('c', 1).ToPosition());
+            board.putPeca(new Bishop(board, Color.white), new ChessPosition('f', 1).ToPosition());
+
+            board.putPeca(new Quenn(board, Color.black), new ChessPosition('d', 8).ToPosition());
+            board.putPeca(new Quenn(board, Color.white), new ChessPosition('d', 1).ToPosition());
         }
     }
 }

@@ -54,7 +54,7 @@ namespace board
 
         public bool validPosition(Position pos)
         {
-            if(pos.col < 0 || pos.line < 0 || pos.line > line || pos.col > col)
+            if(pos.col < 0 || pos.line < 0 || pos.line >= line || pos.col >= col)
                 return false;   
             return true;
         }

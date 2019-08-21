@@ -19,6 +19,10 @@ namespace console
                     Console.Write("Put the origin: ");
                     Position origin = Screen.readCommand().ToPosition();
                     
+                    bool[,] possible = game.board.peca(origin).possibleMoves();
+                    Console.Clear();
+                    Screen.printBoard(game.board, possible);
+
                     Console.Write("Put the destiny: ");
                     Position destiny = Screen.readCommand().ToPosition();
 
