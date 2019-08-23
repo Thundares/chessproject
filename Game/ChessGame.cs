@@ -6,9 +6,8 @@ namespace Game
     class ChessGame
     {
         public Board board {get; private set;}
-        private int turn;
-        private Color playerTurn;
-
+        public int turn {get; private set;}
+        public Color playerTurn {get; private set;}
         public bool Finished { get; private set; }
 
         public ChessGame()
@@ -28,6 +27,24 @@ namespace Game
             board.putPeca(p, destiny);
         }
 
+        public void validMove(Position pos)
+        {
+            if(board.peca(pos) == null)
+                throw new BoardExceptions("There is no piece in this position");
+            if(playerTurn != board.peca(pos).color)
+                throw new BoardExceptions("This is not your piece");
+            if(!board.peca(pos).isItPossibleToMove())
+                throw new BoardExceptions("This piece cannot move");
+        }
+        public void turnmk(Position origin, Position destiny)
+        {
+            move(origin, destiny);
+            turn++;
+            if(playerTurn == Color.white)
+                playerTurn = Color.black;
+            else
+                playerTurn = Color.white;
+        }
         public void Initialize()
         {
 

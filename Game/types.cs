@@ -122,7 +122,7 @@ namespace Game
                 {
                     break;
                 }
-                test.line++;
+                test.col--;
             }
             return mat;
         }
@@ -170,7 +170,7 @@ namespace Game
                     break;
                 }
                 test.col++;
-                test.line++;
+                test.line--;
             }
             //diagonal esquerda baixo
             test.definePosition(posicao.line + 1, posicao.col - 1);
@@ -185,7 +185,7 @@ namespace Game
                 test.col--;
             }
             //diagonal direita baixo
-            test.definePosition(posicao.line + 1, posicao.col - 1);
+            test.definePosition(posicao.line + 1, posicao.col + 1);
             while(board.validPosition(test) && canMove(test))
             {
                 mat[test.line, test.col] = true;
@@ -194,7 +194,7 @@ namespace Game
                     break;
                 }
                 test.line++;
-                test.col--;
+                test.col++;
             }
             return mat;
         }
@@ -209,7 +209,6 @@ namespace Game
         public Quenn(Board board, Color color) : base(board, color)
         {
         }
-
         private bool canMove(Position pos)
         {
             Peca p = board.peca(pos);
@@ -262,7 +261,7 @@ namespace Game
                 {
                     break;
                 }
-                test.line++;
+                test.col--;
             }
             //diagonal esquerda cima     
             test.definePosition(posicao.line - 1, posicao.col - 1);
@@ -286,7 +285,7 @@ namespace Game
                     break;
                 }
                 test.col++;
-                test.line++;
+                test.line--;
             }
             //diagonal esquerda baixo
             test.definePosition(posicao.line + 1, posicao.col - 1);
@@ -301,7 +300,7 @@ namespace Game
                 test.col--;
             }
             //diagonal direita baixo
-            test.definePosition(posicao.line + 1, posicao.col - 1);
+            test.definePosition(posicao.line + 1, posicao.col + 1);
             while(board.validPosition(test) && canMove(test))
             {
                 mat[test.line, test.col] = true;
@@ -310,7 +309,7 @@ namespace Game
                     break;
                 }
                 test.line++;
-                test.col--;
+                test.col++;
             }
             return mat;
         }

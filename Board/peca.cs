@@ -17,6 +17,19 @@ namespace board
             this.manyMoves = 0;
         }
 
+        public bool isItPossibleToMove()
+        {
+            bool [,] mat = possibleMoves();
+            for(int i =0; i<board.line; i++)
+            {
+                for(int j = 0; j< board.col; j++)
+                {
+                    if(mat[i,j])
+                        return true;
+                }
+            }
+            return false;
+        }
         public abstract bool[,] possibleMoves();
         public void moreMoves()
         {

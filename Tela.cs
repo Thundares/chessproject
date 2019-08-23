@@ -34,7 +34,9 @@ namespace console
                         Console.BackgroundColor = changed;
                     }
                     else
+                    {
                         Console.BackgroundColor = original;
+                    }
                     printPeca(board.peca(i, j));
                     Console.BackgroundColor = original;
                 }
