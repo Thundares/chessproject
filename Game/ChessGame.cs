@@ -132,8 +132,8 @@ namespace Game
             //roque esquerda
             if(p is King && destiny.col == origin.col - 2)
             {
-                Position tower = new Position(origin.line, origin.col - 4);
-                Position newtower = new Position(origin.line, origin.col - 1);
+                Position tower = new Position(origin.line, 0);
+                Position newtower = new Position(origin.line, 3);
                 move(tower, newtower);
                 
             }

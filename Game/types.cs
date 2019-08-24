@@ -70,7 +70,7 @@ namespace Game
                 mat[test.line, test.col] = true;
 
             //roque esquerda
-            test.definePosition(posicao.line, posicao.col - 3);
+            test.definePosition(posicao.line, posicao.col - 2);
             if(board.validPosition(test) && 
             canMove(test) && 
             manyMoves == 0 &&
