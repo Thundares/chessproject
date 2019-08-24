@@ -9,15 +9,47 @@ namespace Game
         public int turn {get; private set;}
         public Color playerTurn {get; private set;}
         public bool Finished { get; private set; }
+        public bool check {get; private set;}
         private HashSet<Peca> All;
         private HashSet<Peca> Capture;
+
+        private Color Enemy(Color c)
+        {
+            if(c == Color.white)
+                return Color.black;
+            else
+                return Color.white;
+        }
+        private Peca King(Color c)
+        {
+            foreach (Peca x in InGame(c))
+            {
+                if(x is King)
+                    return x;
+            }
+            return null;
+        }
+        public bool Check(Color c)
+        {
+            Peca K = King(c);
+            if(K == null)
+                throw new BoardExceptions("there is no king");
+
+            foreach (Peca x in InGame(Enemy(c)))
+            {
+                bool[,] mat = x.possibleMoves();
+                if(mat[K.posicao.line, K.posicao.col])
+                    return true; 
+            }
+            return false;
+        }
         public ChessGame()
         {
             board = new Board(8,8);
             turn = 1;
             playerTurn = Color.white;
             Finished = false;
-
+            check = false;
             All = new HashSet<Peca>();
             Capture = new HashSet<Peca>();
 
@@ -46,7 +78,7 @@ namespace Game
             aux.ExceptWith(Captured(c));
             return aux;
         }
-        public void move(Position origin, Position destiny)
+        public Peca move(Position origin, Position destiny)
         {
             Peca p = board.removePeca(origin);
             p.moreMoves();
@@ -54,6 +86,18 @@ namespace Game
             board.putPeca(p, destiny);
             if(captured != null)
                 Capture.Add(captured);
+            return captured;
+        }
+
+        public void unMove(Position origin, Position destiny, Peca x)
+        {
+            Peca p = board.removePeca(destiny);
+            if(x != null)
+            {
+                board.putPeca(x, destiny);
+                Capture.Remove(x);
+            }
+            board.putPeca(p, origin);
         }
 
         public void validMove(Position pos)
@@ -67,7 +111,22 @@ namespace Game
         }
         public void turnmk(Position origin, Position destiny)
         {
-            move(origin, destiny);
+            Peca captured = move(origin, destiny);
+
+            if(Check(playerTurn))
+            {
+                unMove(origin, destiny, captured);
+                throw new BoardExceptions("You cannot move this piece");
+            }
+            if(Check(Enemy(playerTurn)))
+            {
+                check = true;
+            }
+            else
+            {
+                check = false;
+            }
+
             turn++;
             if(playerTurn == Color.white)
                 playerTurn = Color.black;

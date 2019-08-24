@@ -13,9 +13,14 @@ namespace console
             Console.WriteLine();
             printCaptured(game);
             Console.WriteLine();
+            if(game.check)
+            {
+                Console.WriteLine("CHECK!");
+            }
             Console.WriteLine("Turn: " + game.turn);
             Console.WriteLine("Wainting the player " + game.playerTurn );
-            Console.Write("Put the origin: ");
+            Console.WriteLine("Put the origin: ");
+
         }
 
         public static void printCaptured(ChessGame game)
