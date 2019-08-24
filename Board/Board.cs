@@ -4,17 +4,24 @@ namespace board
 {
     class Board
     {
+
+        //prop
         public int line { get; set; }
         public int col { get; set; }
         private Peca[,] pecas;
+        //end prop
 
+        //constructor
         public Board(int line, int col)
         {
             this.line = line;
             this.col = col;
             pecas = new Peca[line, col];
         }
+        //end constructor
 
+
+        //all the rest
         public Peca peca(int line, int col)
         {
             return pecas[line, col];

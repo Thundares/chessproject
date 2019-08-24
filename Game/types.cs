@@ -420,8 +420,10 @@ namespace Game
 
      class Pawn : Peca
     {
-        public Pawn(Board board, Color color) : base(board, color)
+        private ChessGame game;
+        public Pawn(Board board, Color color, ChessGame game) : base(board, color)
         {
+            this.game = game;
         }
 
         private bool isFree(Position pos)
@@ -460,6 +462,17 @@ namespace Game
                 test.definePosition(posicao.line - 2, posicao.col);
                 if(board.validPosition(test) && isFree(test) && this.manyMoves == 0)
                     mat[test.line, test.col] = true;
+
+                //EnPassant
+                if(posicao.line == 3)
+                {
+                    Position left = new Position(posicao.line, posicao.col - 1);
+                    Position right = new Position(posicao.line, posicao.col + 1);
+                    if(board.validPosition(left) && isThereEnemy(left) && board.peca(left) == game.EnPassantPossible)
+                        mat[left.line-1, left.col] = true;
+                    else if(board.validPosition(right) && isThereEnemy(right) && board.peca(right) == game.EnPassantPossible)
+                        mat[right.line-1, right.col] = true;
+                }
             }
             else{
                 //Se
@@ -480,6 +493,17 @@ namespace Game
                 test.definePosition(posicao.line + 2, posicao.col);
                 if(board.validPosition(test) && isFree(test) && this.manyMoves == 0)
                     mat[test.line, test.col] = true;
+
+                //EnPassant
+                if(posicao.line == 4)
+                {
+                    Position left = new Position(posicao.line, posicao.col - 1);
+                    Position right = new Position(posicao.line, posicao.col + 1);
+                    if(board.validPosition(left) && isThereEnemy(left) && board.peca(left) == game.EnPassantPossible)
+                        mat[left.line+1, left.col] = true;
+                    else if(board.validPosition(right) && isThereEnemy(right) && board.peca(right) == game.EnPassantPossible)
+                        mat[right.line+1, right.col] = true;
+                }
             }
 
             return mat;

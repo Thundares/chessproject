@@ -6,6 +6,7 @@ namespace Game
 {
     class ChessGame
     {
+        //prop
         public Board board {get; private set;}
         public int turn {get; private set;}
         public Color playerTurn {get; private set;}
@@ -13,7 +14,25 @@ namespace Game
         public bool check {get; private set;}
         private HashSet<Peca> All;
         private HashSet<Peca> Capture;
+        public Peca EnPassantPossible;
+        //end prop
 
+        //construct
+        public ChessGame()
+        {
+            board = new Board(8,8);
+            turn = 1;
+            playerTurn = Color.white;
+            Finished = false;
+            check = false;
+            All = new HashSet<Peca>();
+            Capture = new HashSet<Peca>();
+            EnPassantPossible = null;
+            Initialize();
+        }
+        //end construct
+
+        //all the rest
         private Color Enemy(Color c)
         {
             if(c == Color.white)
@@ -76,19 +95,6 @@ namespace Game
             return true;
         }
 
-        public ChessGame()
-        {
-            board = new Board(8,8);
-            turn = 1;
-            playerTurn = Color.white;
-            Finished = false;
-            check = false;
-            All = new HashSet<Peca>();
-            Capture = new HashSet<Peca>();
-
-            Initialize();
-        }
-
         public HashSet<Peca> Captured(Color c)
         {
             HashSet<Peca> aux = new HashSet<Peca>();
@@ -99,7 +105,6 @@ namespace Game
             }
             return aux;
         }
-
         public HashSet<Peca> InGame(Color c)
         {
             HashSet<Peca> aux = new HashSet<Peca>();
@@ -111,6 +116,8 @@ namespace Game
             aux.ExceptWith(Captured(c));
             return aux;
         }
+       
+        //Used to move a piece here in the editor
         public Peca move(Position origin, Position destiny)
         {
             Peca p = board.removePeca(origin);
@@ -137,6 +144,25 @@ namespace Game
                 move(tower, newtower);
                 
             }
+
+            //enPassant
+            if(p is Pawn)
+            {
+                if(origin.col != destiny.col && captured == null)
+                {
+                    Position pawn;
+                    if(p.color == Color.white)
+                    {
+                        pawn = new Position(destiny.line +1, destiny.col);
+                    }
+                    else
+                    {
+                        pawn = new Position(destiny.line -1, destiny.col);
+                    }
+                    captured = board.removePeca(pawn);
+                    Capture.Add(captured);
+                }
+            }
             return captured;
         }
 
@@ -150,6 +176,25 @@ namespace Game
                 Capture.Remove(x);
             }
             board.putPeca(p, origin);
+
+            //enPassant
+            if(p is Pawn)
+            {
+                if(origin.col != destiny.col && x == EnPassantPossible)
+                {
+                    Peca final = board.removePeca(destiny);
+                    Position pawn;
+                    if(p.color == Color.white)
+                    {
+                        pawn = new Position(3, destiny.col);
+                    }
+                    else
+                    {
+                        pawn = new Position(4, destiny.col);
+                    }
+                    board.putPeca(final, pawn);
+                }
+            }
         }
 
         public void validMove(Position pos)
@@ -161,6 +206,8 @@ namespace Game
             if(!board.peca(pos).isItPossibleToMove())
                 throw new BoardExceptions("This piece cannot move");
         }
+
+        //used to make a movement in the game
         public void turnmk(Position origin, Position destiny)
         {
             Peca captured = move(origin, destiny);
@@ -190,6 +237,13 @@ namespace Game
                 playerTurn = Color.black;
             else
                 playerTurn = Color.white;
+
+            Peca p = board.peca(destiny);
+            //enpassant
+            if(p is Pawn && destiny.line == origin.line - 2 || destiny.line == origin.line + 2 )
+                EnPassantPossible = p;
+            else
+                EnPassantPossible = null;
         }
 
         public void targetingValid(Position origin, Position destiny)
@@ -227,23 +281,23 @@ namespace Game
             putNew('d',8, new Quenn(board, Color.black));
             putNew('d',1, new Quenn(board, Color.white));
 
-            putNew('a', 7, new Pawn(board, Color.black));
-            putNew('b', 7, new Pawn(board, Color.black));
-            putNew('c', 7, new Pawn(board, Color.black));
-            putNew('d', 7, new Pawn(board, Color.black));
-            putNew('e', 7, new Pawn(board, Color.black));
-            putNew('f', 7, new Pawn(board, Color.black));
-            putNew('g', 7, new Pawn(board, Color.black));
-            putNew('h', 7, new Pawn(board, Color.black));
+            putNew('a', 7, new Pawn(board, Color.black, this));
+            putNew('b', 7, new Pawn(board, Color.black, this));
+            putNew('c', 7, new Pawn(board, Color.black, this));
+            putNew('d', 7, new Pawn(board, Color.black, this));
+            putNew('e', 7, new Pawn(board, Color.black, this));
+            putNew('f', 7, new Pawn(board, Color.black, this));
+            putNew('g', 7, new Pawn(board, Color.black, this));
+            putNew('h', 7, new Pawn(board, Color.black, this));
 
-            putNew('a', 2, new Pawn(board, Color.white));
-            putNew('b', 2, new Pawn(board, Color.white));
-            putNew('c', 2, new Pawn(board, Color.white));
-            putNew('d', 2, new Pawn(board, Color.white));
-            putNew('e', 2, new Pawn(board, Color.white));
-            putNew('f', 2, new Pawn(board, Color.white));
-            putNew('g', 2, new Pawn(board, Color.white));
-            putNew('h', 2, new Pawn(board, Color.white));
+            putNew('a', 2, new Pawn(board, Color.white, this));
+            putNew('b', 2, new Pawn(board, Color.white, this));
+            putNew('c', 2, new Pawn(board, Color.white, this));
+            putNew('d', 2, new Pawn(board, Color.white, this));
+            putNew('e', 2, new Pawn(board, Color.white, this));
+            putNew('f', 2, new Pawn(board, Color.white, this));
+            putNew('g', 2, new Pawn(board, Color.white, this));
+            putNew('h', 2, new Pawn(board, Color.white, this));
         
         }
     }
