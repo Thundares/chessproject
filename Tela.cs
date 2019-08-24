@@ -1,11 +1,45 @@
 using board;
 using System;
 using Game;
+using System.Collections.Generic;
 
 namespace console
 {
     class Screen
     {
+        public static void printGame(ChessGame game)
+        {
+            printBoard(game.board);
+            Console.WriteLine();
+            printCaptured(game);
+            Console.WriteLine();
+            Console.WriteLine("Turn: " + game.turn);
+            Console.WriteLine("Wainting the player " + game.playerTurn );
+            Console.Write("Put the origin: ");
+        }
+
+        public static void printCaptured(ChessGame game)
+        {
+            Console.WriteLine("Captured:");
+            Console.Write("White: ");
+            printHash(game.Captured(Color.white));
+            Console.Write("Black: ");
+            ConsoleColor aux = Console.ForegroundColor;
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            printHash(game.Captured(Color.black));
+            Console.ForegroundColor = aux;
+
+        }
+
+        public static void printHash(HashSet<Peca> group)
+        {
+            Console.Write("[");
+            foreach (Peca x in group)
+            {
+                Console.Write(x + " ");
+            }
+            Console.WriteLine("]");
+        }
         public static void printBoard(Board board)
         {
             for(int i = 0; i < board.line; i++)

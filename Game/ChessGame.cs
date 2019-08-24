@@ -1,5 +1,5 @@
 using board;
-using System;
+using System.Collections.Generic;
 
 namespace Game
 {
@@ -9,22 +9,51 @@ namespace Game
         public int turn {get; private set;}
         public Color playerTurn {get; private set;}
         public bool Finished { get; private set; }
-
+        private HashSet<Peca> All;
+        private HashSet<Peca> Capture;
         public ChessGame()
         {
             board = new Board(8,8);
             turn = 1;
             playerTurn = Color.white;
             Finished = false;
+
+            All = new HashSet<Peca>();
+            Capture = new HashSet<Peca>();
+
             Initialize();
         }
 
+        public HashSet<Peca> Captured(Color c)
+        {
+            HashSet<Peca> aux = new HashSet<Peca>();
+            foreach (Peca x in Capture)
+            {
+                if(x.color == c)
+                    aux.Add(x);
+            }
+            return aux;
+        }
+
+        public HashSet<Peca> InGame(Color c)
+        {
+            HashSet<Peca> aux = new HashSet<Peca>();
+            foreach (Peca x in All)
+            {
+                if(x.color == c)
+                    aux.Add(x);
+            }
+            aux.ExceptWith(Captured(c));
+            return aux;
+        }
         public void move(Position origin, Position destiny)
         {
             Peca p = board.removePeca(origin);
             p.moreMoves();
             Peca captured = board.removePeca(destiny);
             board.putPeca(p, destiny);
+            if(captured != null)
+                Capture.Add(captured);
         }
 
         public void validMove(Position pos)
@@ -51,29 +80,36 @@ namespace Game
             if(!board.peca(origin).destinyCalculation(destiny))
                 throw new BoardExceptions("Impossible movement!");
         }
+
+        public void putNew(char c, int l, Peca peca)
+        {
+            board.putPeca(peca, new ChessPosition(c, l).ToPosition());
+            All.Add(peca);
+        }
         public void Initialize()
         {
 
-            board.putPeca(new King(board, Color.white), new ChessPosition('e',1).ToPosition());
-            board.putPeca(new King(board, Color.black), new ChessPosition('e',8).ToPosition());
+            putNew('e',1, new King(board, Color.white));
+            putNew('e',8, new King(board, Color.black));
 
-            board.putPeca(new Tower(board, Color.white), new ChessPosition('a',1).ToPosition());
-            board.putPeca(new Tower(board, Color.white), new ChessPosition('h',1).ToPosition());
-            board.putPeca(new Tower(board, Color.black), new ChessPosition('a',8).ToPosition());
-            board.putPeca(new Tower(board, Color.black), new ChessPosition('h',8).ToPosition());
+            putNew('a',1, new Tower(board, Color.white));
+            putNew('h',1, new Tower(board, Color.white));
+            putNew('h',8, new Tower(board, Color.black));
+            putNew('a',8, new Tower(board, Color.black));
 
-            board.putPeca(new Horse(board, Color.black), new ChessPosition('b', 8).ToPosition());
-            board.putPeca(new Horse(board, Color.black), new ChessPosition('g', 8).ToPosition());
-            board.putPeca(new Horse(board, Color.white), new ChessPosition('b', 1).ToPosition());
-            board.putPeca(new Horse(board, Color.white), new ChessPosition('g', 1).ToPosition());
+            putNew('b',8, new Horse(board, Color.black));
+            putNew('g',8, new Horse(board, Color.black));
+            putNew('g',1, new Horse(board, Color.white));
+            putNew('b',1, new Horse(board, Color.white));
+            
+            putNew('c',8, new Bishop(board, Color.black));
+            putNew('f',8, new Bishop(board, Color.black));
+            putNew('c',1, new Bishop(board, Color.white));
+            putNew('f',1, new Bishop(board, Color.white));
 
-            board.putPeca(new Bishop(board, Color.black), new ChessPosition('c', 8).ToPosition());
-            board.putPeca(new Bishop(board, Color.black), new ChessPosition('f', 8).ToPosition());
-            board.putPeca(new Bishop(board, Color.white), new ChessPosition('c', 1).ToPosition());
-            board.putPeca(new Bishop(board, Color.white), new ChessPosition('f', 1).ToPosition());
-
-            board.putPeca(new Quenn(board, Color.black), new ChessPosition('d', 8).ToPosition());
-            board.putPeca(new Quenn(board, Color.white), new ChessPosition('d', 1).ToPosition());
+            putNew('d',8, new Quenn(board, Color.black));
+            putNew('d',1, new Quenn(board, Color.white));
+            
         }
     }
 }

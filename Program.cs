@@ -14,24 +14,21 @@ namespace console
                 while(!game.Finished)
                 {
                     try{
-                    Console.Clear();
-                    Screen.printBoard(game.board);
-                    
-                    Console.WriteLine("Turn: " + game.turn);
-                    Console.WriteLine("Wainting the player " + game.playerTurn );
-                    Console.Write("Put the origin: ");
-                    Position origin = Screen.readCommand().ToPosition();
-                    game.validMove(origin);
+                        Console.Clear();
 
-                    bool[,] possible = game.board.peca(origin).possibleMoves();
-                    Console.Clear();
-                    Screen.printBoard(game.board, possible);
+                        Screen.printGame(game);
+                        Position origin = Screen.readCommand().ToPosition();
+                        game.validMove(origin);
 
-                    Console.Write("Put the destiny: ");
-                    Position destiny = Screen.readCommand().ToPosition();
-                    game.targetingValid(origin, destiny);
+                        bool[,] possible = game.board.peca(origin).possibleMoves();
+                        Console.Clear();
+                        Screen.printBoard(game.board, possible);
 
-                    game.turnmk(origin, destiny);
+                        Console.Write("Put the destiny: ");
+                        Position destiny = Screen.readCommand().ToPosition();
+                        game.targetingValid(origin, destiny);
+
+                        game.turnmk(origin, destiny);
                     }
                     catch (BoardExceptions e)
                     {
