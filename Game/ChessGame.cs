@@ -45,6 +45,12 @@ namespace Game
             else
                 playerTurn = Color.white;
         }
+
+        public void targetingValid(Position origin, Position destiny)
+        {
+            if(!board.peca(origin).destinyCalculation(destiny))
+                throw new BoardExceptions("Impossible movement!");
+        }
         public void Initialize()
         {
 

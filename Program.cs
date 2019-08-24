@@ -29,6 +29,7 @@ namespace console
 
                     Console.Write("Put the destiny: ");
                     Position destiny = Screen.readCommand().ToPosition();
+                    game.targetingValid(origin, destiny);
 
                     game.turnmk(origin, destiny);
                     }

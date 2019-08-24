@@ -36,5 +36,9 @@ namespace board
             manyMoves++;
         }
         
+        public bool destinyCalculation(Position p)
+        {
+            return possibleMoves()[p.line, p.col];
+        }
     }
 }
