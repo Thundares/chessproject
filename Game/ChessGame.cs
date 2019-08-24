@@ -1,5 +1,6 @@
 using board;
 using System.Collections.Generic;
+using System;
 
 namespace Game
 {
@@ -43,6 +44,38 @@ namespace Game
             }
             return false;
         }
+
+        public bool CheckMate(Color c)
+        {
+            if(!Check(c))
+            {
+                return false;
+            }
+            foreach (Peca x in InGame(c))
+            {
+                bool[,] mat = x.possibleMoves();
+                for (int i = 0; i < board.line; i++)
+                {
+                    for (int j = 0; j < board.col; j++)
+                    {
+                        if(mat[i,j])
+                        {
+                            Position destiny = new Position(i,j);
+                            Position origin = x.posicao;
+                            Peca destroyed = move(x.posicao, destiny);
+                            bool test = Check(c);
+                            unMove(origin, destiny, destroyed);
+                            if(!test)
+                            {
+                                return false;
+                            }
+                        }
+                    }
+                }
+            }
+            return true;
+        }
+
         public ChessGame()
         {
             board = new Board(8,8);
@@ -125,6 +158,12 @@ namespace Game
             else
             {
                 check = false;
+            }
+
+            if(CheckMate(Enemy(playerTurn)))
+            {
+                Finished = true;
+                Console.WriteLine("CheckMate! Winner is " + playerTurn);
             }
 
             turn++;
