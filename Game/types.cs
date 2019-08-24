@@ -84,6 +84,7 @@ namespace Game
             return mat;
         }
         
+
         public override string ToString()
         {
             return "K";
@@ -229,9 +230,9 @@ namespace Game
             return "B";
         }
     }
-    class Quenn : Peca
+    class Queen : Peca
     {
-        public Quenn(Board board, Color color) : base(board, color)
+        public Queen(Board board, Color color) : base(board, color)
         {
         }
         private bool canMove(Position pos)

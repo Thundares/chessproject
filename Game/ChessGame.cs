@@ -57,9 +57,11 @@ namespace Game
 
             foreach (Peca x in InGame(Enemy(c)))
             {
-                bool[,] mat = x.possibleMoves();
-                if(mat[K.posicao.line, K.posicao.col])
-                    return true; 
+                if(!(x is King)){
+                    bool[,] mat = x.possibleMoves();
+                    if(mat[K.posicao.line, K.posicao.col])
+                        return true;
+                } 
             }
             return false;
         }
@@ -211,12 +213,29 @@ namespace Game
         public void turnmk(Position origin, Position destiny)
         {
             Peca captured = move(origin, destiny);
+            Peca p = board.peca(destiny);
 
+            //te deixou em xeque?
             if(Check(playerTurn))
             {
                 unMove(origin, destiny, captured);
                 throw new BoardExceptions("You cannot move this piece");
             }
+            //promotion
+            if(p is Pawn)
+            {
+                if(p.posicao.line == 0 || p.posicao.line == 7)
+                {
+                    p = board.removePeca(destiny);
+                    All.Remove(p);
+                    Peca Queen = new Queen(board, p.color);
+                    board.putPeca(Queen, destiny);
+                    All.Add(Queen);
+                }
+            }
+            //end promotion
+
+            //Deixou o outro em xeque?
             if(Check(Enemy(playerTurn)))
             {
                 check = true;
@@ -226,19 +245,19 @@ namespace Game
                 check = false;
             }
 
+            //deu xequemate?
             if(CheckMate(Enemy(playerTurn)))
             {
                 Finished = true;
                 Console.WriteLine("CheckMate! Winner is " + playerTurn);
             }
-
+            //passa o turno
             turn++;
             if(playerTurn == Color.white)
                 playerTurn = Color.black;
             else
                 playerTurn = Color.white;
 
-            Peca p = board.peca(destiny);
             //enpassant
             if(p is Pawn && destiny.line == origin.line - 2 || destiny.line == origin.line + 2 )
                 EnPassantPossible = p;
@@ -278,8 +297,8 @@ namespace Game
             putNew('c',1, new Bishop(board, Color.white));
             putNew('f',1, new Bishop(board, Color.white));
 
-            putNew('d',8, new Quenn(board, Color.black));
-            putNew('d',1, new Quenn(board, Color.white));
+            putNew('d',8, new Queen(board, Color.black));
+            putNew('d',1, new Queen(board, Color.white));
 
             putNew('a', 7, new Pawn(board, Color.black, this));
             putNew('b', 7, new Pawn(board, Color.black, this));
