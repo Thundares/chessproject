@@ -4,8 +4,10 @@ namespace Game
 {
     class King : Peca
     {
-        public King(Board board, Color color) : base(board, color)
+        private ChessGame game;
+        public King(Board board, Color color, ChessGame game) : base(board, color)
         {
+            this.game = game;
         }
 
         private bool canMove(Position pos)
@@ -54,6 +56,29 @@ namespace Game
             //NO
             test.definePosition(posicao.line - 1, posicao.col - 1);
             if(board.validPosition(test) && canMove(test))
+                mat[test.line, test.col] = true;
+
+            //roque direita
+            test.definePosition(posicao.line, posicao.col + 2);
+            if(board.validPosition(test) && 
+            canMove(test) && 
+            manyMoves == 0 &&
+            game.check == false &&
+            game.board.peca(posicao.line, posicao.col + 3).manyMoves == 0 &&
+            game.board.peca(posicao.line, posicao.col + 2) == null &&
+            game.board.peca(posicao.line, posicao.col + 1) == null)
+                mat[test.line, test.col] = true;
+
+            //roque esquerda
+            test.definePosition(posicao.line, posicao.col - 3);
+            if(board.validPosition(test) && 
+            canMove(test) && 
+            manyMoves == 0 &&
+            game.check == false &&
+            game.board.peca(posicao.line, posicao.col - 4).manyMoves == 0 &&
+            game.board.peca(posicao.line, posicao.col - 3) == null &&
+            game.board.peca(posicao.line, posicao.col - 2) == null &&
+            game.board.peca(posicao.line, posicao.col - 1) == null)
                 mat[test.line, test.col] = true;
 
             return mat;
@@ -390,6 +415,79 @@ namespace Game
         public override string ToString()
         {
             return "H";
+        }
+    }
+
+     class Pawn : Peca
+    {
+        public Pawn(Board board, Color color) : base(board, color)
+        {
+        }
+
+        private bool isFree(Position pos)
+        {
+            Peca p = board.peca(pos);
+            return board.peca(pos) == null;
+        }
+
+        private bool isThereEnemy(Position pos)
+        {
+            Peca p = board.peca(pos);
+            return p != null && p.color != this.color;
+        }
+        public override bool[,] possibleMoves()
+        {
+            bool[,] mat = new bool[board.line, board.col];
+            Position test = new Position(0,0);
+
+            if(this.color == Color.white){
+                //acima
+                test.definePosition(posicao.line - 1, posicao.col);
+                if(board.validPosition(test) && isFree(test))
+                    mat[test.line, test.col] = true;
+
+                //NE
+                test.definePosition(posicao.line - 1, posicao.col + 1);
+                if(board.validPosition(test) && isThereEnemy(test))
+                    mat[test.line, test.col] = true;
+
+                //NO
+                test.definePosition(posicao.line - 1, posicao.col - 1);
+                if(board.validPosition(test) && isThereEnemy(test))
+                    mat[test.line, test.col] = true;
+
+                //Cima duplo
+                test.definePosition(posicao.line - 2, posicao.col);
+                if(board.validPosition(test) && isFree(test) && this.manyMoves == 0)
+                    mat[test.line, test.col] = true;
+            }
+            else{
+                //Se
+                test.definePosition(posicao.line + 1, posicao.col + 1);
+                if(board.validPosition(test) && isThereEnemy(test))
+                    mat[test.line, test.col] = true;
+
+                //s
+                test.definePosition(posicao.line + 1, posicao.col);
+                if(board.validPosition(test) && isFree(test))
+                    mat[test.line, test.col] = true;
+                //so
+                test.definePosition(posicao.line + 1, posicao.col - 1);
+                if(board.validPosition(test) && isThereEnemy(test))
+                    mat[test.line, test.col] = true;
+
+                //Baixo duplo
+                test.definePosition(posicao.line + 2, posicao.col);
+                if(board.validPosition(test) && isFree(test) && this.manyMoves == 0)
+                    mat[test.line, test.col] = true;
+            }
+
+            return mat;
+        }
+        
+        public override string ToString()
+        {
+            return "P";
         }
     }
 }

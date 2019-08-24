@@ -119,12 +119,31 @@ namespace Game
             board.putPeca(p, destiny);
             if(captured != null)
                 Capture.Add(captured);
+
+            //roque direita
+            if(p is King && destiny.col == origin.col + 2)
+            {
+                Position tower = new Position(origin.line, origin.col + 3);
+                Position newtower = new Position(origin.line, origin.col + 1);
+                move(tower, newtower);
+                
+            }
+
+            //roque esquerda
+            if(p is King && destiny.col == origin.col - 2)
+            {
+                Position tower = new Position(origin.line, origin.col - 4);
+                Position newtower = new Position(origin.line, origin.col - 1);
+                move(tower, newtower);
+                
+            }
             return captured;
         }
 
         public void unMove(Position origin, Position destiny, Peca x)
         {
             Peca p = board.removePeca(destiny);
+            p.lessMoves();
             if(x != null)
             {
                 board.putPeca(x, destiny);
@@ -187,8 +206,8 @@ namespace Game
         public void Initialize()
         {
 
-            putNew('e',1, new King(board, Color.white));
-            putNew('e',8, new King(board, Color.black));
+            putNew('e',1, new King(board, Color.white, this));
+            putNew('e',8, new King(board, Color.black, this));
 
             putNew('a',1, new Tower(board, Color.white));
             putNew('h',1, new Tower(board, Color.white));
@@ -207,7 +226,25 @@ namespace Game
 
             putNew('d',8, new Quenn(board, Color.black));
             putNew('d',1, new Quenn(board, Color.white));
-            
+
+            putNew('a', 7, new Pawn(board, Color.black));
+            putNew('b', 7, new Pawn(board, Color.black));
+            putNew('c', 7, new Pawn(board, Color.black));
+            putNew('d', 7, new Pawn(board, Color.black));
+            putNew('e', 7, new Pawn(board, Color.black));
+            putNew('f', 7, new Pawn(board, Color.black));
+            putNew('g', 7, new Pawn(board, Color.black));
+            putNew('h', 7, new Pawn(board, Color.black));
+
+            putNew('a', 2, new Pawn(board, Color.white));
+            putNew('b', 2, new Pawn(board, Color.white));
+            putNew('c', 2, new Pawn(board, Color.white));
+            putNew('d', 2, new Pawn(board, Color.white));
+            putNew('e', 2, new Pawn(board, Color.white));
+            putNew('f', 2, new Pawn(board, Color.white));
+            putNew('g', 2, new Pawn(board, Color.white));
+            putNew('h', 2, new Pawn(board, Color.white));
+        
         }
     }
 }

@@ -36,6 +36,10 @@ namespace board
             manyMoves++;
         }
         
+        public void lessMoves()
+        {
+            manyMoves--;
+        }
         public bool destinyCalculation(Position p)
         {
             return possibleMoves()[p.line, p.col];
